@@ -1,0 +1,28 @@
+name: Run LINE Notification Daily
+
+on:
+  schedule:
+    - cron: '0 1 * * *'  # JST 08:00（UTC 23:00）
+  workflow_dispatch:
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    env:
+      CHANNEL_ACCESS_TOKEN: ${{ secrets.CHANNEL_ACCESS_TOKEN }}
+      USER_ID: ${{ secrets.USER_ID }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run bot job
+        run: python job_runner.py
