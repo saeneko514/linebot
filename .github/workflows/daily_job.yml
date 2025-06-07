@@ -2,7 +2,7 @@ name: Run LINE Notification Daily
 
 on:
   schedule:
-    - cron: '0 1 * * *'  # JST 08:00（UTC 23:00）
+    - cron: '0 20 * * *'  #5:00 AM
   workflow_dispatch:
 
 jobs:
