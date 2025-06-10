@@ -63,7 +63,7 @@ def job():
         send_line_message(stock_info)
 
 # 通知したい時間-9時間
-schedule.every().day.at("09:40").do(job)
+schedule.every().day.at("21:40").do(job)
 
 if __name__ == "__main__":
     print("Worker started. Waiting for schedule...")
