@@ -66,7 +66,5 @@ def job():
 schedule.every().day.at("12:25").do(job)
 
 if __name__ == "__main__":
-    print("Worker started. Waiting for schedule...")
-    while True:
-        schedule.run_pending()
-        time.sleep(60)
+    print("Manual test run: calling job()")
+    job()  # ← 通知を今すぐ送る
