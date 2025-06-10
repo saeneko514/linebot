@@ -63,7 +63,7 @@ def job():
         send_line_message(stock_info)
 
 # 毎日11:00（JST） = 2:00（UTC）に実行
-schedule.every().day.at("02:00").do(job)
+schedule.every().day.at("05:00").do(job)
 
 if __name__ == "__main__":
     print("Worker started. Waiting for schedule...")
