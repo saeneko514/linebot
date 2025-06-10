@@ -12,7 +12,7 @@ USER_ID = os.environ.get("USER_ID")
 line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
 
 # Sheety設定
-SHEETY_ID = "91a51e4efb03bbce4a21258eebc3ae12"
+SHEETY_ID = os.environ.get("SHEETY_ENDPOINT")
 SHEETY_ENDPOINT = f"https://api.sheety.co/{SHEETY_ID}/貸借取引情報リスト/シート1"
 
 def load_urls_from_sheety():
@@ -63,7 +63,7 @@ def job():
         send_line_message(stock_info)
 
 # 通知したい時間-9時間
-schedule.every().day.at("02:45").do(job)
+schedule.every().day.at("09:40").do(job)
 
 if __name__ == "__main__":
     print("Worker started. Waiting for schedule...")
