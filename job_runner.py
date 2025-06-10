@@ -62,8 +62,8 @@ def job():
         stock_info = fetch_stock_info(url)
         send_line_message(stock_info)
 
-# 毎日11:00（JST） = 2:00（UTC）に実行
-schedule.every().day.at("05:00").do(job)
+# 通知したい時間-1時間
+schedule.every().day.at("13:00").do(job)
 
 if __name__ == "__main__":
     print("Worker started. Waiting for schedule...")
