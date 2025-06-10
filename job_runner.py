@@ -69,4 +69,5 @@ if __name__ == "__main__":
     print("Worker started. Waiting for schedule...")
     while True:
         schedule.run_pending()
+        print(f"Checked schedule at {time.strftime('%Y-%m-%d %H:%M:%S')}")
         time.sleep(60)
