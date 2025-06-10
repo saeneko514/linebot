@@ -62,12 +62,11 @@ def job():
         stock_info = fetch_stock_info(url)
         send_line_message(stock_info)
 
-# 通知したい時間-1時間
-schedule.every().day.at("12:40").do(job)
+# 通知したい時間-9時間
+schedule.every().day.at("05:00").do(job)
 
 if __name__ == "__main__":
     print("Worker started. Waiting for schedule...")
     while True:
         schedule.run_pending()
-        print(f"Checked schedule at {time.strftime('%Y-%m-%d %H:%M:%S')}")
         time.sleep(60)
