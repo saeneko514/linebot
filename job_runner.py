@@ -11,62 +11,71 @@ CHANNEL_ACCESS_TOKEN = os.environ.get("CHANNEL_ACCESS_TOKEN")
 USER_ID = os.environ.get("USER_ID")
 line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
 
-# Sheety設定
-SHEETY_ID = os.environ.get("SHEETY_ENDPOINT")
-SHEETY_ENDPOINT = f"https://api.sheety.co/{SHEETY_ID}/貸借取引情報リスト/シート1"
+print(f"通知対象のユーザーID: {USER_ID}")
 
-def load_urls_from_sheety():
-    response = requests.get(SHEETY_ENDPOINT)
-    data = response.json()
-    sheet_key = "シート1"
-    urls = [entry["url"] for entry in data[sheet_key] if entry.get("url")]
-    return urls
+try:
+    line_bot_api.push_message(USER_ID, TextSendMessage(text="テスト通知です"))
+    print("通知送信成功")
+except LineBotApiError as e:
+    print("通知送信失敗:", e.status_code, e.error.message)
 
-def fetch_stock_info(url):
-    r = requests.get(url)
-    soup = BeautifulSoup(r.content, "html.parser")
-    result = {}
-    try:
-        result["銘柄名"] = soup.find('h1', class_="heading__ttl").get_text(strip=True)
-    except:
-        result["銘柄名"] = "取得失敗"
 
-    fields = {
-        "差引残高": 1,
-        "品貸料率": 2,
-        "応札ランク": 2,
-        "制限措置": 1
-    }
+# # Sheety設定
+# SHEETY_ID = os.environ.get("SHEETY_ENDPOINT")
+# SHEETY_ENDPOINT = f"https://api.sheety.co/{SHEETY_ID}/貸借取引情報リスト/シート1"
 
-    for label, td_index in fields.items():
-        th = soup.find('th', string=lambda x: x and label in x)
-        if th:
-            tr = th.find_parent("tr")
-            tds = tr.find_all("td")
-            if len(tds) > td_index:
-                result[label] = tds[td_index].text.strip()
-            else:
-                result[label] = "取得失敗"
-        else:
-            result[label] = "該当項目なし"
+# def load_urls_from_sheety():
+#     response = requests.get(SHEETY_ENDPOINT)
+#     data = response.json()
+#     sheet_key = "シート1"
+#     urls = [entry["url"] for entry in data[sheet_key] if entry.get("url")]
+#     return urls
 
-    return result
+# def fetch_stock_info(url):
+#     r = requests.get(url)
+#     soup = BeautifulSoup(r.content, "html.parser")
+#     result = {}
+#     try:
+#         result["銘柄名"] = soup.find('h1', class_="heading__ttl").get_text(strip=True)
+#     except:
+#         result["銘柄名"] = "取得失敗"
 
-def send_line_message(stock_data):
-    message = "\n".join([f"{key}: {value}" for key, value in stock_data.items()])
-    line_bot_api.push_message(USER_ID, TextSendMessage(text=message))
+#     fields = {
+#         "差引残高": 1,
+#         "品貸料率": 2,
+#         "応札ランク": 2,
+#         "制限措置": 1
+#     }
 
-def job():
-    urls = load_urls_from_sheety()
-    for url in urls:
-        stock_info = fetch_stock_info(url)
-        send_line_message(stock_info)
+#     for label, td_index in fields.items():
+#         th = soup.find('th', string=lambda x: x and label in x)
+#         if th:
+#             tr = th.find_parent("tr")
+#             tds = tr.find_all("td")
+#             if len(tds) > td_index:
+#                 result[label] = tds[td_index].text.strip()
+#             else:
+#                 result[label] = "取得失敗"
+#         else:
+#             result[label] = "該当項目なし"
 
-# 通知したい時間-9時間
-schedule.every().day.at("02:45").do(job)
+#     return result
 
-if __name__ == "__main__":
-    print("Worker started. Waiting for schedule...")
-    while True:
-        schedule.run_pending()
-        time.sleep(60)
+# def send_line_message(stock_data):
+#     message = "\n".join([f"{key}: {value}" for key, value in stock_data.items()])
+#     line_bot_api.push_message(USER_ID, TextSendMessage(text=message))
+
+# def job():
+#     urls = load_urls_from_sheety()
+#     for url in urls:
+#         stock_info = fetch_stock_info(url)
+#         send_line_message(stock_info)
+
+# # 通知したい時間-9時間
+# schedule.every().day.at("02:45").do(job)
+
+# if __name__ == "__main__":
+#     print("Worker started. Waiting for schedule...")
+#     while True:
+#         schedule.run_pending()
+#         time.sleep(60)
