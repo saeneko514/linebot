@@ -21,6 +21,7 @@ SHEETY_ENDPOINT = f"https://api.sheety.co/{SHEETY_ID}/貸借取引情報リス�
 def load_urls_from_sheety():
     response = requests.get(SHEETY_ENDPOINT)
     data = response.json()
+    print(data)
     sheet_key = "シート1"
     urls = [entry["url"] for entry in data[sheet_key] if entry.get("url")]
     return urls
@@ -66,7 +67,7 @@ def job():
         send_line_message(stock_info)
 
 # 通知したい時間-9時間
-schedule.every().day.at("03:38").do(job)
+schedule.every().day.at("03:44").do(job)
 
 if __name__ == "__main__":
     print("Worker started. Waiting for schedule...")
