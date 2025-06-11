@@ -22,7 +22,7 @@ def load_urls_from_sheety():
     response = requests.get(SHEETY_ENDPOINT)
     data = response.json()
     print(data)
-    sheet_key = "シート1"
+    sheet_key = "sheet1"
     urls = [entry["url"] for entry in data[sheet_key] if entry.get("url")]
     return urls
 
