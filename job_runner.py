@@ -16,7 +16,7 @@ print(f"通知対象のユーザーID: {USER_ID}")
 
 # Sheety設定
 SHEETY_ID = os.environ.get("SHEETY_ENDPOINT")
-SHEETY_ENDPOINT = f"https://api.sheety.co/{SHEETY_ID}/貸借取引情報リスト/シート1"
+SHEETY_ENDPOINT = f"https://api.sheety.co/{SHEETY_ID}/貸借取引情報リスト/sheet1"
 
 def load_urls_from_sheety():
     response = requests.get(SHEETY_ENDPOINT)
@@ -87,7 +87,7 @@ def job():
         send_line_message(stock_info)
 
 # 通知したい時間-9時間
-schedule.every().day.at("04:21").do(job)
+schedule.every().day.at("04:25").do(job)
 
 if __name__ == "__main__":
     print("Worker started. Waiting for schedule...")
