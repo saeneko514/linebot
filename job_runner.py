@@ -90,7 +90,7 @@ def job():
         send_line_message(stock_info)
 
 # 通知したい時間（JST 11:45 → UTC 02:45）
-schedule.every().day.at("03:25").do(job)
+schedule.every().day.at("03:30").do(job)
 
 if __name__ == "__main__":
     print("Worker started. Waiting for schedule...")
@@ -101,9 +101,6 @@ if __name__ == "__main__":
     while True:
         schedule.run_pending()
         time.sleep(60)
-
-
-
 # from bs4 import BeautifulSoup
 # import requests
 # import os
