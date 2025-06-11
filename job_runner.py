@@ -21,10 +21,30 @@ SHEETY_ENDPOINT = f"https://api.sheety.co/{SHEETY_ID}/貸借取引情報リス�
 def load_urls_from_sheety():
     response = requests.get(SHEETY_ENDPOINT)
     data = response.json()
-    print(data)
+    print(data)  # ← デバッグ用に Sheet API のレスポンス確認
+
+    # ① Sheety APIのクォータ制限チェック
+    if "errors" in data:
+        print("❌ Sheety APIエラー:", data["errors"])
+        return []
+
+    # ② sheet1 キーが存在するかチェック
     sheet_key = "sheet1"
+    if sheet_key not in data:
+        print(f"❌ '{sheet_key}' がレスポンスに見つかりません。レスポンス: {data}")
+        return []
+
+    # ③ url カラムが存在する行だけを抽出
     urls = [entry["url"] for entry in data[sheet_key] if entry.get("url")]
     return urls
+
+# def load_urls_from_sheety():
+#     response = requests.get(SHEETY_ENDPOINT)
+#     data = response.json()
+#     print(data)
+#     sheet_key = "sheet1"
+#     urls = [entry["url"] for entry in data[sheet_key] if entry.get("url")]
+#     return urls
 
 def fetch_stock_info(url):
     r = requests.get(url)
@@ -67,7 +87,7 @@ def job():
         send_line_message(stock_info)
 
 # 通知したい時間-9時間
-schedule.every().day.at("04:13").do(job)
+schedule.every().day.at("04:21").do(job)
 
 if __name__ == "__main__":
     print("Worker started. Waiting for schedule...")
