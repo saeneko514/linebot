@@ -13,7 +13,7 @@ line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
 
 
 # Sheety設定
-SHEETY_ID = os.environ.get("SHEETY_ENDPOINT")
+SHEETY_ID = os.environ.get("SHEETY_ID")
 SHEETY_ENDPOINT = f"https://api.sheety.co/{SHEETY_ID}/貸借取引情報リスト/sheet1"
 
 
