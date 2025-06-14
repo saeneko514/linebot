@@ -59,17 +59,8 @@ def send_line_message(stock_data):
     message = "\n".join([f"{key}: {value}" for key, value in stock_data.items()])
     line_bot_api.push_message(USER_ID, TextSendMessage(text=message))
 
-def job():
+def job_project_a():
     urls = load_urls_from_sheety()
     for url in urls:
         stock_info = fetch_stock_info(url)
         send_line_message(stock_info)
-
-# 通知したい時間-9時間
-schedule.every().day.at("02:45").do(job)
-
-if __name__ == "__main__":
-    print("Worker started. Waiting for schedule...")
-    while True:
-        schedule.run_pending()
-        time.sleep(60)
