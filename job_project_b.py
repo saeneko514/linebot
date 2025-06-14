@@ -3,9 +3,15 @@ import time
 import requests
 import os
 
+SHEETY_ID = os.environ["SHEETY_ID"]
 LINE_CHANNEL_ACCESS_TOKEN = os.environ.get("CHANNEL_ACCESS_TOKEN")
-SHEETY_ENDPOINT = "https://api.sheety.co/91a51e4efb03bbce4a21258eebc3ae12/lineUserData/userdata"
-MESSAGE_TEXT = '今日もお疲れさまでした！'
+SHEETY_ENDPOINT = f"https://api.sheety.co/{SHEETY_ID}/lineUserData/userdata"
+DIARY_ENDPOINT = f"https://api.sheety.co/{SHEETY_ID}/lineUserData/diary"
+MESSAGE_TEXT = (
+    "今日もお疲れさまでした。\n"
+    "今日のあなたのネガティブな感情を感じた出来事を\n"
+    "５行で日記形式で書いてください。"
+)
 
 def fetch_user_ids():
     response = requests.get(SHEETY_ENDPOINT)
@@ -32,3 +38,54 @@ def job_project_b():
     user_ids = fetch_user_ids()
     for user_id in user_ids:
         push_message(user_id, MESSAGE_TEXT)
+
+
+
+@app.route("/", methods=["GET"])
+def health(): return jsonify({"status": "ok"}), 200
+
+
+@app.route("/callback", methods=["POST"])
+def callback():
+    signature = request.headers.get("X-Line-Signature", "")
+    body = request.get_data(as_text=True)
+    try:
+        handler.handle(body, signature)
+    except InvalidSignatureError:
+        abort(400)
+    return "OK"
+
+
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+    user_id = event.source.user_id
+    message = event.message.text
+    now = (datetime.utcnow() + timedelta(hours=9)).strftime("%Y-%m-%d %H:%M:%S")
+    try:
+        name = line_bot_api.get_profile(user_id).display_name
+    except:
+        name = "不明"
+
+    data = {
+        "diary": {
+            "name": name,
+            "userId": user_id,
+            "timestamp": now,
+            "diary": message
+        }
+    }
+    requests.post(DIARY_ENDPOINT, json=data)
+
+
+def send_text(user_id, text, event):
+    try:
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=text))
+    except LineBotApiError:
+        line_bot_api.push_message(user_id, TextSendMessage(text=text))
+
+
+# エントリポイント
+if __name__ != "__main__":
+    application = app
+else:
+    app.run(debug=True, port=5000)
