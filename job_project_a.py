@@ -22,7 +22,7 @@ def load_urls_from_sheety():
     data = response.json()
     print(data)
     sheet_key = "sheet1"
-    urls = [entry["url"] for entry in data[sheet_key] if entry.get("url")]
+    urls = [entry.get("url") for entry in data["sheet1"] if entry.get("url")]
     return urls
 
 def fetch_stock_info(url):
