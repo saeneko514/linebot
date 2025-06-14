@@ -23,6 +23,7 @@ def push_message(user_id, text):
     }
     res = requests.post('https://api.line.me/v2/bot/message/push', headers=headers, json=payload)
     print(f'Sent to {user_id}: {res.status_code}')
+    print(f"Response status: {res.status_code}, body: {res.text}")
 
 def job_project_b():
     print("Sending LINE message...")
