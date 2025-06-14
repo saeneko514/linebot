@@ -4,7 +4,7 @@ import requests
 import os
 
 LINE_CHANNEL_ACCESS_TOKEN = os.environ.get("CHANNEL_ACCESS_TOKEN")
-SHEETY_ENDPOINT = f'https://api.sheety.co/{os.environ["SHEETY_ENDPOINT"]}/lineUserData/userdata'
+SHEETY_ENDPOINT = f'https://api.sheety.co/{os.environ["SHEETY_ID"]}/lineUserData/userdata'
 MESSAGE_TEXT = '今日もお疲れさまでした！'
 
 def fetch_user_ids():
