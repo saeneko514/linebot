@@ -6,7 +6,6 @@ import os
 SHEETY_ID = os.environ["SHEETY_ID"]
 LINE_CHANNEL_ACCESS_TOKEN = os.environ.get("CHANNEL_ACCESS_TOKEN")
 SHEETY_ENDPOINT = f"https://api.sheety.co/{SHEETY_ID}/lineUserData/userdata"
-DIARY_ENDPOINT = f"https://api.sheety.co/{SHEETY_ID}/lineUserData/diary"
 MESSAGE_TEXT = (
     "今日もお疲れさまでした。\n"
     "今日のあなたのネガティブな感情を感じた出来事を\n"
