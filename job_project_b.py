@@ -9,7 +9,9 @@ MESSAGE_TEXT = '今日もお疲れさまでした！'
 
 def fetch_user_ids():
     response = requests.get(SHEETY_ENDPOINT)
+    print("Sheety response status:", response.status_code)
     data = response.json()
+    print("Sheety response JSON:", data)
     return [row['userId'] for row in data['userdata'] if row.get('userId')]
 
 def push_message(user_id, text):
