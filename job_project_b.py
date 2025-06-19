@@ -17,7 +17,14 @@ def fetch_user_ids():
     print("Sheety response status:", response.status_code)
     data = response.json()
     print("Sheety response JSON:", data)
-    return [row['userId'] for row in data['userdata'] if row.get('userId')]
+
+    user_ids = [
+        row['userId']
+        for row in data['userdata']
+        if row.get('userId') and row.get('type') == "register"
+    ]
+    return list(set(user_ids))
+    
 
 def push_message(user_id, text):
     headers = {
