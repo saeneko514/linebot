@@ -5,7 +5,7 @@ import os
 
 SHEETY_ID = os.environ["SHEETY_ID"]
 LINE_CHANNEL_ACCESS_TOKEN = os.environ.get("CHANNEL_ACCESS_TOKEN")
-SHEETY_ENDPOINT = f"https://api.sheety.co/{SHEETY_ID}/lineUserData/userdata"
+SHEETY_ENDPOINT = f"https://api.sheety.co/{SHEETY_ID}/lineUserData/useragreement"
 MESSAGE_TEXT = (
     "今日もお疲れさまでした。\n"
     "今日のあなたのネガティブな感情を感じた出来事を\n"
@@ -18,13 +18,10 @@ def fetch_user_ids():
     data = response.json()
     print("Sheety response JSON:", data)
 
-    user_ids = [
-        row['userId']
-        for row in data['userdata']
-        if row.get('userId') and row.get('type') == "register"
-    ]
-    return list(set(user_ids))
-    
+    user_list = data.get("useragreement", [])
+    user_ids = [entry["userId"] for entry in user_list if "userId" in entry]
+    return user_ids
+
 
 def push_message(user_id, text):
     headers = {
