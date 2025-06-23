@@ -5,7 +5,7 @@ from job_project_b import job_project_b
 
 # スケジュール設定（日本時間-9時間）
 schedule.every().day.at("02:45").do(job_project_a)
-schedule.every().day.at("07:10").do(job_project_b)
+schedule.every().day.at("02:30").do(job_project_b)
 
 if __name__ == "__main__":
     print("Scheduler started.")
